@@ -30,7 +30,10 @@ class Author(models.Model):
                                      verbose_name="Дата смерти",
                                      null=True, blank=True)
     def __str__(self):
-        return self.last_name
+        dates_living = '('+str(self.date_of_birth)+'-'+str(self.date_of_death)+')'
+        return(' '.join([self.last_name,
+                         self.first_name[0],
+                         dates_living]))
 
 class Book(models.Model):
     title = models.CharField(max_length=200,
