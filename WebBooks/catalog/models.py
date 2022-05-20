@@ -30,7 +30,9 @@ class Author(models.Model):
                                      verbose_name="Дата смерти",
                                      null=True, blank=True)
     def __str__(self):
-        dates_living = '('+str(self.date_of_birth)+'-'+str(self.date_of_death)+')'
+        birth_date = str(self.date_of_birth)
+        death_date = str(self.date_of_death)
+        dates_living = '(с '+birth_date+' по '+death_date+')'
         return(' '.join([self.last_name,
                          self.first_name[0],
                          dates_living]))
@@ -55,8 +57,15 @@ class Book(models.Model):
     isbn = models.CharField(max_length=13,
                             help_text="Должно содержать 13 символов",
                             verbose_name="ISBN книги")
+
+    def display_author(self):
+        return ', '.join([author.last_name for author in
+                          self.author.all()])
+    display_author.short_description = 'Авторы'
+
     def __str__(self):
         return self.title
+
 
     def get_absolute_url(self):
         """
@@ -66,6 +75,7 @@ class Book(models.Model):
         экземпляру книги
         """
         return reverse('book-detail', args=[str(self.id)])
+
 
 
 class Status(models.Model):
